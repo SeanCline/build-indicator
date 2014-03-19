@@ -8,7 +8,7 @@ define print
 endef
 
 # Project information.
-SOURCES = main.cpp BuildStatus.cpp SignalTower.cpp FadePin.cpp
+SOURCES = main.cpp BuildStatus.cpp SignalTower.cpp FadePin.cpp ProgramOptions.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 EXECUTABLE = build-indicator
 PCH = pch.h
