@@ -4,7 +4,7 @@ This project polls a Jenkins API url periodically and drives the Raspberry Pi's 
 #Installation#
 These instructions assume a fresh installation of [Raspbian](http://www.raspbian.org/).
 
-**Note:** This project was developed with GCC 4.8. There is a good chance it will work properly on on 4.7, but if not, you may want to follow the steps in *Upgrading to Raspbian Jessie*.
+**Note:** This project requires GCC 4.8 (or better). I find that the easiest way to get 4.8 is to upgrade Raspbian to Jessie. It is possible to pull only the specific packages, or build them oneself, but I will leave that to the reader if it is really necessary.
 
 ##Upgrading to Raspbian Jessie##
 	sudo apt-get update
