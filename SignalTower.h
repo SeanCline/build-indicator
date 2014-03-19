@@ -16,6 +16,10 @@ public: // Construction.
 	SignalTower(int redPinNumber, int yellowPinNumber, int greenPinNumber,
 	            std::chrono::milliseconds fadeTime = std::chrono::milliseconds(1000));
 	~SignalTower();
+
+private: // Non-copyable.
+  SignalTower(const SignalTower&) = delete;
+  SignalTower& operator=(const SignalTower&) = delete;
 	
 public: // Light stuff.
 	void setRedState(LightState, int brightness = 0, bool fade = true);
