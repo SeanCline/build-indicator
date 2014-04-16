@@ -35,7 +35,7 @@ namespace {
 	{
 		pin.tick();
 		
-		// See if we needs to reverse directions while pulsing.
+		// See if we need to reverse directions while pulsing.
 		if (state == SignalTower::LightState::pulsing && pin.getDesiredValue() == pin.getActualValue()) {
 			// Reverse fade direction.
 			if (pin.getDesiredValue() != 0) {
@@ -49,14 +49,15 @@ namespace {
 
 
 void SignalTower::runUpdateLoop()
-{	
+{
 	while (!exitThreadFlag_) {
 		{
 			lock_guard<mutex> lock(mutex_);
+			
 			updatePin(redPin_, redState_);
 			updatePin(yellowPin_, yellowState_);
 			updatePin(greenPin_, greenState_);
-		}
+		} //< Let the mutex go before sleeping.
 		
 		this_thread::sleep_for(fadeTime_ / 100);
 	}

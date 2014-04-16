@@ -13,8 +13,7 @@ public: // Enums.
 	enum class LightState { solid, pulsing };
 
 public: // Construction.
-	SignalTower(int redPinNumber, int yellowPinNumber, int greenPinNumber,
-	            std::chrono::milliseconds fadeTime = std::chrono::milliseconds(1000));
+	SignalTower(int redPinNumber, int yellowPinNumber, int greenPinNumber, std::chrono::milliseconds fadeTime);
 	~SignalTower();
 
 private: // Non-copyable.

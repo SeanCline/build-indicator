@@ -2,8 +2,6 @@
 #include "BuildStatus.h"
 #include "ProgramOptions.h"
 
-#include <wiringPi.h>
-
 #include <boost/program_options/variables_map.hpp>
 
 #include <string>
@@ -16,12 +14,11 @@ using namespace std;
 
 void runBuildStatusLoop(const boost::program_options::variables_map& opts)
 {
-		wiringPiSetup();
-		
 		int r = opts["red-pin"].as<int>();
 		int y = opts["yellow-pin"].as<int>();
 		int g = opts["green-pin"].as<int>();
-		SignalTower lights(r, y, g);
+		int fadeTime = opts["fade-period"].as<int>();
+		SignalTower lights(r, y, g, std::chrono::milliseconds(fadeTime));
 		lights.runSelfTest();
 		
 		string statusUri(opts["status-uri"].as<string>());

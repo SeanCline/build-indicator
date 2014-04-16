@@ -17,6 +17,7 @@ po::variables_map getProgramOptions(int argc, char* argv[])
 		("red-pin,r", po::value<int>()->default_value(8), "GPIO pin number for red light.")
 		("yellow-pin,y", po::value<int>()->default_value(9), "GPIO pin number for yellow light.")
 		("green-pin,g", po::value<int>()->default_value(7), "GPIO pin number for green light.")
+		("fade-period,p", po::value<int>()->default_value(500), "Millisecond period for pulsing LEDs to blink.")
 	;
 
 	po::variables_map opts;
