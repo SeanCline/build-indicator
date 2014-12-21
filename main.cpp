@@ -2,6 +2,7 @@
 #include "BuildStatus.h"
 #include "ProgramOptions.h"
 
+#include <boost/program_options/errors.hpp>
 #include <boost/program_options/variables_map.hpp>
 
 #include <string>

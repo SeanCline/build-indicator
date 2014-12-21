@@ -11,7 +11,11 @@ endef
 SOURCES = main.cpp BuildStatus.cpp SignalTower.cpp FadePin.cpp ProgramOptions.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 EXECUTABLE = build-indicator
-PCH = pch.h
+
+# 3rd Party Libraries
+GIF2UNICORNPATH = ./Gif2UnicornHat
+LDFLAGS += -lcurl -lcurlpp -lwiringPi -lpthread -lboost_program_options -L$(GIF2UNICORNPATH) -lGif2UnicornHat
+INCLUDES += -I$(GIF2UNICORNPATH)
 
 # Build Flags
 OPTIMIZATION_LEVEL = -O0 -g -ggdb
@@ -19,29 +23,21 @@ WARNINGS = -Wall -Wextra -Wcast-align -Wcast-qual -Wconversion -Wformat=2 -Winit
 STRICTNESS = -pedantic
 CXXFLAGS = -std=c++11 $(OPTIMIZATION_LEVEL) $(WARNINGS) $(STRICTNESS)
 
-# 3rd Party Libraries
-LDFLAGS += -lcurl -lcurlpp -lwiringPi -lpthread -lboost_program_options
-#INCLUDES += 
-
 # Targets
 all: $(SOURCES) $(EXECUTABLE)
 
-$(PCH).gch: $(PCH)
-	$(call print, "Building precompiled header $< into $@")
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $<
-	
-$(OBJECTS): $(PCH).gch
+$(OBJECTS):
 .cpp.o:
 	$(call print, "Building $< into $@")
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -include $(PCH) -c $< -o $@
+	@$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 $(EXECUTABLE): $(OBJECTS)
+	@make -C $(GIF2UNICORNPATH)
 	$(call print, "Linking $(OBJECTS) into $@")
-	$(CXX) $(LDFLAGS) $(OBJECTS) -o $@
+	@$(CXX) $(LDFLAGS) $(OBJECTS) -o $@
 
 clean:
 	$(call print, "Cleaning...")
-	rm -f $(OBJECTS)
-	rm -f $(EXECUTABLE)
-	rm -f $(PCH).gch
+	@rm -f $(OBJECTS) $(EXECUTABLE)
+	@make -C $(GIF2UNICORNPATH) clean
 	$(call print, "Done cleaning.")
