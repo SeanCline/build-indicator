@@ -8,12 +8,12 @@ define print
 endef
 
 # Project information.
-SOURCES = main.cpp BuildStatus.cpp ProgramOptions.cpp BuildStatusReporter.cpp UnicornHatReporter/UnicornHatReporter.cpp PwmReporter/PwmReporter.cpp PwmReporter/SignalTower.cpp PwmReporter/FadePin.cpp
+SOURCES = $(wildcard *.cpp) $(wildcard PwmReporter/*.cpp) $(wildcard UnicornHatReporter/*.cpp)
 OBJECTS = $(SOURCES:.cpp=.o)
 EXECUTABLE = build-indicator
 
 # 3rd Party Libraries
-GIF2UNICORNPATH = ./Gif2UnicornHat
+GIF2UNICORNPATH = ./UnicornHatReporter/Gif2UnicornHat
 WS2812PATH = $(GIF2UNICORNPATH)/UnicornHat/python/ws2812/lib/
 LDFLAGS += -lcurl -lcurlpp -lgif -lwiringPi -lpthread -lboost_program_options -L$(GIF2UNICORNPATH) -lGif2UnicornHat -L$(WS2812PATH) -lws2812-RPi
 INCLUDES += -I./ -I$(GIF2UNICORNPATH)

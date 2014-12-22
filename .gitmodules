@@ -1,3 +1,3 @@
-[submodule "Gif2UnicornHat"]
-	path = Gif2UnicornHat
+[submodule "UnicornHatReporter/Gif2UnicornHat"]
+	path = UnicornHatReporter/Gif2UnicornHat
 	url = https://github.com/SeanCline/Gif2UnicornHat
