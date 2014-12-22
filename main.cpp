@@ -1,6 +1,8 @@
-#include "SignalTower.h"
 #include "BuildStatus.h"
 #include "ProgramOptions.h"
+#include "BuildStatusReporter.h"
+
+
 
 #include <boost/program_options/errors.hpp>
 #include <boost/program_options/variables_map.hpp>
@@ -15,13 +17,7 @@ using namespace std;
 
 void runBuildStatusLoop(const boost::program_options::variables_map& opts)
 {
-		int r = opts["red-pin"].as<int>();
-		int y = opts["yellow-pin"].as<int>();
-		int g = opts["green-pin"].as<int>();
-		int fadeTime = opts["fade-period"].as<int>();
-		SignalTower lights(r, y, g, std::chrono::milliseconds(fadeTime));
-		lights.runSelfTest();
-		
+		auto reporter = BuildStatusReporterRegistry::instance().instantiateReporter(opts["reporter"].as<string>(), opts);
 		string statusUri(opts["status-uri"].as<string>());
 		chrono::seconds pollingPeriod(opts["polling-period"].as<int>());
 		while (true) {
@@ -36,22 +32,7 @@ void runBuildStatusLoop(const boost::program_options::variables_map& opts)
 				cerr << "Failed to get build status. Error = " << ex.what() << endl;
 			}
 			
-			// Update the lights to match the build status.
-			lights.turnAllOff();
-			switch(status) {
-				case BuildStatus::building:
-					lights.setYellowState(SignalTower::LightState::pulsing);
-					break;
-				case BuildStatus::successful:
-					lights.setGreenState(SignalTower::LightState::solid, 100);
-					break;
-				case BuildStatus::failed:
-					lights.setRedState(SignalTower::LightState::solid, 100);
-					break;
-				case BuildStatus::unknown:
-					lights.setRedState(SignalTower::LightState::pulsing);
-					break;
-			}
+			reporter->reportBuildStatus(status);
 			
 			this_thread::sleep_for(pollingPeriod);
 		}
@@ -60,7 +41,7 @@ void runBuildStatusLoop(const boost::program_options::variables_map& opts)
 
 int main(int argc, char* argv[])
 {
-	try {
+	try {		
 		auto opts = getProgramOptions(argc, argv);
 		runBuildStatusLoop(opts);
 	} catch(boost::program_options::error& ex) { 

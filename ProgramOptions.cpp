@@ -12,6 +12,7 @@ po::variables_map getProgramOptions(int argc, char* argv[])
 	po::options_description desc("Allowed options");
 	desc.add_options()
 		("help,h", "Print this help message.")
+		("reporter", po::value<string>()->required(), "The module that will be used to report build status. (e.g. PWM, UnicornHat)")
 		("status-uri", po::value<string>()->required(), "The Jenkins '/api/json' url to periodically extract build status from.")
 		("polling-period,t", po::value<int>()->default_value(30), "Seconds between status updates from the Jenkins server.")
 		("red-pin,r", po::value<int>()->default_value(8), "GPIO pin number for red light.")
