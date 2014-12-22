@@ -8,7 +8,7 @@ define print
 endef
 
 # Project information.
-SOURCES = main.cpp BuildStatus.cpp SignalTower.cpp FadePin.cpp ProgramOptions.cpp BuildStatusReporter.cpp UnicornHatReporter.cpp PwmReporter.cpp
+SOURCES = main.cpp BuildStatus.cpp ProgramOptions.cpp BuildStatusReporter.cpp UnicornHatReporter/UnicornHatReporter.cpp PwmReporter/PwmReporter.cpp PwmReporter/SignalTower.cpp PwmReporter/FadePin.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 EXECUTABLE = build-indicator
 
@@ -16,7 +16,7 @@ EXECUTABLE = build-indicator
 GIF2UNICORNPATH = ./Gif2UnicornHat
 WS2812PATH = $(GIF2UNICORNPATH)/UnicornHat/python/ws2812/lib/
 LDFLAGS += -lcurl -lcurlpp -lgif -lwiringPi -lpthread -lboost_program_options -L$(GIF2UNICORNPATH) -lGif2UnicornHat -L$(WS2812PATH) -lws2812-RPi
-INCLUDES += -I$(GIF2UNICORNPATH)
+INCLUDES += -I./ -I$(GIF2UNICORNPATH)
 
 # Build Flags
 OPTIMIZATION_LEVEL = -O0 -g -ggdb
@@ -31,7 +31,6 @@ dependencies:
 	@make -C $(GIF2UNICORNPATH) dependencies
 	@make -C $(GIF2UNICORNPATH)
 
-$(OBJECTS):
 .cpp.o:
 	$(call print, "Compiling $< into $@")
 	@$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@

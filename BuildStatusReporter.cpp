@@ -34,8 +34,8 @@ unique_ptr<BuildStatusReporter> BuildStatusReporterRegistry::instantiateReporter
 {
 	try {
 		return registry_.at(reporterName)(options);
-	} catch (...) {
-		throw runtime_error("Registry does not have a factory registered as \"" + reporterName + "\"");
+	} catch (out_of_range&) {
+		throw runtime_error("Unknown reporter: \"" + reporterName + "\"");
 	}
 }
 
