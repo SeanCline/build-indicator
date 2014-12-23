@@ -21,10 +21,6 @@ void runBuildStatusLoop(const boost::program_options::variables_map& opts)
 		string statusUri(opts["status-uri"].as<string>());
 		chrono::seconds pollingPeriod(opts["polling-period"].as<int>());
 		while (true) {
-		
-			// Get the build status from the server.
-			cout << "Polling for build status." << endl;
-			
 			BuildStatus status = BuildStatus::unknown;
 			try {
 				status = queryLastBuildStatus(statusUri);
