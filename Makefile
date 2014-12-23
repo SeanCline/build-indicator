@@ -31,6 +31,9 @@ dependencies:
 	@make -C $(GIF2UNICORNPATH) dependencies
 	@make -C $(GIF2UNICORNPATH)
 
+cleandeps:
+	@make -C $(GIF2UNICORNPATH) clean
+	
 .cpp.o:
 	$(call print, "Compiling $< into $@")
 	@$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
@@ -42,5 +45,4 @@ $(EXECUTABLE): $(OBJECTS)
 clean:
 	$(call print, "Cleaning...")
 	@rm -f $(OBJECTS) $(EXECUTABLE)
-	@make -C $(GIF2UNICORNPATH) clean
 	$(call print, "Done cleaning.")
