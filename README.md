@@ -18,12 +18,6 @@ These instructions assume a fresh installation of [Raspbian](http://www.raspbian
 ##Install dependencies##
 	sudo apt-get install build-essential git libboost-program-options-dev libcurl4-openssl-dev libcurlpp-dev libgif-dev
 
-##Clone, build, and install [WiringPi](http://wiringpi.com/)##
-	cd ~
-	git clone git://git.drogon.net/wiringPi
-	cd wiringPi
-	./build
-
 ##Clone and build build-indicator##
 	cd ~
 	git clone --recursive https://github.com/SeanCline/build-indicator.git

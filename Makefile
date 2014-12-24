@@ -14,9 +14,11 @@ EXECUTABLE = build-indicator
 
 # 3rd Party Libraries
 GIF2UNICORNPATH = ./UnicornHatReporter/Gif2UnicornHat
+WIRINGPIPATH = ./PwmReporter/wiringPi/wiringPi
 WS2812PATH = $(GIF2UNICORNPATH)/UnicornHat/python/ws2812/lib/
-LDFLAGS += -lcurl -lcurlpp -lgif -lwiringPi -lpthread -lboost_program_options -L$(GIF2UNICORNPATH) -lGif2UnicornHat -L$(WS2812PATH) -lws2812-RPi
-INCLUDES += -I./ -I$(GIF2UNICORNPATH)
+
+LDFLAGS += -lcurl -lcurlpp -lgif -lpthread -lboost_program_options -L$(GIF2UNICORNPATH) -lGif2UnicornHat -L$(WS2812PATH) -lws2812-RPi -L$(WIRINGPIPATH) -lwiringPi
+INCLUDES += -I./ -I$(GIF2UNICORNPATH) -I$(WIRINGPIPATH)
 
 # Build Flags
 OPTIMIZATION_LEVEL = -O0 -g -ggdb
@@ -28,10 +30,12 @@ CXXFLAGS = -std=c++11 $(OPTIMIZATION_LEVEL) $(WARNINGS) $(STRICTNESS)
 all: $(SOURCES) $(EXECUTABLE)
 
 dependencies:
+	@make -C $(WIRINGPIPATH) static
 	@make -C $(GIF2UNICORNPATH) dependencies
 	@make -C $(GIF2UNICORNPATH)
 
 cleandeps:
+	@make -C $(WIRINGPIPATH) clean
 	@make -C $(GIF2UNICORNPATH) clean
 	
 .cpp.o:
