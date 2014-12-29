@@ -25,5 +25,5 @@ public: // Animation functions.
 
 private: // Async Schtuff.
 	std::shared_future<AnimationStatus> currentFuture_;
-	std::atomic<bool> cancelAnimationFlag_;
+	std::promise<void> cancelPromise_; //< set_value() cancels current async action.
 };

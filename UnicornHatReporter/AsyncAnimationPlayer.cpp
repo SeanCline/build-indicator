@@ -25,17 +25,22 @@ AsyncAnimationPlayer::~AsyncAnimationPlayer()
 
 
 namespace {
-	AnimationStatus playAnimationWorker(const atomic<bool>& isCancelled, Animation animation)
+	AnimationStatus playAnimationWorker(future<void> cancelled, Animation animation)
 	{
 		UnicornHat& hat = UnicornHat::instance();
-		for (int loopNum = 0; loopNum < animation.numLoops() || animation.numLoops() == 0; ++loopNum) {
+		
+		int numLoops = (animation.numFrames() == 1) ? 1 : animation.numLoops(); //< Don't loop if there is only one frame.
+		for (int loopNum = 0; loopNum < numLoops || numLoops == 0; ++loopNum) {
+			bool isCancelled = false;
 			for (auto& frame : animation.frames()) {
 				if (isCancelled) {
 					return AnimationStatus::cancelled;
 				}
 				
 				hat.showImage(frame.image);
-				this_thread::sleep_for(frame.duration); // TODO: Check the cancelled flag while waiting so long frames can't hang cancelCurrentAnimation(). Maybe replace the flag with a future of its own.
+				
+				// Wait for the next frame or until we are cancelled.
+				isCancelled = (cancelled.wait_for(frame.duration) == future_status::ready);
 			}
 		}
 		
@@ -47,7 +52,9 @@ namespace {
 shared_future<AnimationStatus> AsyncAnimationPlayer::playAnimation(const Animation& animation)
 {
 	cancelCurrentAnimation();
-	currentFuture_ = std::async(launch::async, playAnimationWorker, cref(cancelAnimationFlag_), animation);
+	
+	cancelPromise_ = promise<void>();
+	currentFuture_ = std::async(launch::async, playAnimationWorker, cancelPromise_.get_future(), animation);
 	return currentFuture_;
 }
 
@@ -55,8 +62,7 @@ shared_future<AnimationStatus> AsyncAnimationPlayer::playAnimation(const Animati
 void AsyncAnimationPlayer::cancelCurrentAnimation()
 {
 	if (currentFuture_.valid()) {
-		cancelAnimationFlag_ = true;
+		cancelPromise_.set_value();
 		currentFuture_.wait();
-		cancelAnimationFlag_ = false;
 	}
 }
