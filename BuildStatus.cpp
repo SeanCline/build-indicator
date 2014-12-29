@@ -12,6 +12,20 @@
 using namespace std;
 using namespace boost::property_tree;
 
+
+string to_string(BuildStatus status)
+{
+	switch(status) {
+	case BuildStatus::building:   return "building";
+	case BuildStatus::successful: return "successful";
+	case BuildStatus::failed:     return "failed";
+	case BuildStatus::unknown:    return "unknown";
+	default: throw runtime_error("Unexpected value for BuildStatus.");
+	}
+
+}
+
+
 BuildStatus queryLastBuildStatus(const string& statusUrl)
 {
 	// Pull the status json from the server.

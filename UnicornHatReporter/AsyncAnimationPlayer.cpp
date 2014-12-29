@@ -31,16 +31,14 @@ namespace {
 		
 		int numLoops = (animation.numFrames() == 1) ? 1 : animation.numLoops(); //< Don't loop if there is only one frame.
 		for (int loopNum = 0; loopNum < numLoops || numLoops == 0; ++loopNum) {
-			bool isCancelled = false;
-			for (auto& frame : animation.frames()) {
-				if (isCancelled) {
-					return AnimationStatus::cancelled;
-				}
-				
+			for (auto& frame : animation.frames()) {				
 				hat.showImage(frame.image);
 				
 				// Wait for the next frame or until we are cancelled.
-				isCancelled = (cancelled.wait_for(frame.duration) == future_status::ready);
+				bool isCancelled = (cancelled.wait_for(frame.duration) == future_status::ready);
+				if (isCancelled) {
+					return AnimationStatus::cancelled;
+				}
 			}
 		}
 		

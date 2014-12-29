@@ -1,13 +1,22 @@
 #pragma once
 #include "BuildStatusReporter.h"
-#include "SignalTower.h"
+#include "BuildStatus.h"
+
+#include <boost/program_options/variables_map.hpp>
+#include <boost/program_options/options_description.hpp>
+
+#include <memory>
+
+class SignalTower;
 
 class PwmReporter : public BuildStatusReporter
 {
 public:
-	PwmReporter(int redPin, int yellowPin, int greenPin, int fadeTime);
+	auto getName() const -> std::string override;
+	auto getOptionsDescription() const -> boost::program_options::options_description override;
+	void init(const boost::program_options::variables_map& options) override;
 	void reportBuildStatus(const BuildStatus&) override;
 	
 private:
-	SignalTower lights_;
+	std::unique_ptr<SignalTower> lights_;
 };

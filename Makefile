@@ -8,7 +8,7 @@ define print
 endef
 
 # Project information.
-SOURCES = $(wildcard *.cpp) $(wildcard PwmReporter/*.cpp) $(wildcard UnicornHatReporter/*.cpp)
+SOURCES = $(wildcard *.cpp) $(wildcard PwmReporter/*.cpp) $(wildcard UnicornHatReporter/*.cpp) $(wildcard ConsoleReporter/*.cpp)
 OBJECTS = $(SOURCES:.cpp=.o)
 EXECUTABLE = build-indicator
 
@@ -24,7 +24,7 @@ INCLUDES += -I./ -I$(GIF2UNICORNPATH) -I$(WIRINGPIPATH)
 OPTIMIZATION_LEVEL = -O0 -g -ggdb
 WARNINGS = -Wall -Wextra -Wcast-align -Wcast-qual -Wconversion -Wformat=2 -Winit-self -Winvalid-pch -Wmissing-format-attribute -Wmissing-include-dirs -Wpacked -Wredundant-decls -Wunreachable-code
 STRICTNESS = -pedantic
-CXXFLAGS = -std=c++11 $(OPTIMIZATION_LEVEL) $(WARNINGS) $(STRICTNESS)
+CXXFLAGS = -std=c++1y $(OPTIMIZATION_LEVEL) $(WARNINGS) $(STRICTNESS)
 
 # Targets
 all: $(SOURCES) $(EXECUTABLE)

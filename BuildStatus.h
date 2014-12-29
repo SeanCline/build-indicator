@@ -9,4 +9,6 @@ enum class BuildStatus {
 	unknown
 };
 
+std::string to_string(BuildStatus);
+
 BuildStatus queryLastBuildStatus(const std::string& statusUrl);

@@ -2,9 +2,9 @@
 #include "BuildStatusReporter.h"
 
 #include <boost/program_options/variables_map.hpp>
+#include <boost/program_options/options_description.hpp>
 
 #include <string>
-#include <functional>
 #include <memory>
 #include <stdexcept>
 
@@ -14,6 +14,19 @@ using namespace boost::program_options;
 
 BuildStatusReporter::~BuildStatusReporter()
 {
+
+}
+
+
+void BuildStatusReporter::init(const boost::program_options::variables_map&)
+{
+
+}
+
+
+auto BuildStatusReporter::getOptionsDescription() const -> options_description
+{
+	return options_description();
 }
 
 
@@ -24,23 +37,24 @@ BuildStatusReporterRegistry& BuildStatusReporterRegistry::instance()
 }
 
 
-void BuildStatusReporterRegistry::registerReporter(const string& reporterName, BuildStatusFactory factoryFunction)
+void BuildStatusReporterRegistry::registerReporter(std::unique_ptr<BuildStatusReporter> reporter)
 {
-	registry_[reporterName] = factoryFunction;
+	auto reporterName = reporter->getName();
+	registry_[reporterName] = move(reporter);
 }
 
 
-unique_ptr<BuildStatusReporter> BuildStatusReporterRegistry::instantiateReporter(const string& reporterName, const variables_map& options)
+auto BuildStatusReporterRegistry::getReporter(const std::string& reporterName) -> BuildStatusReporter&
 {
 	try {
-		return registry_.at(reporterName)(options);
+		return *registry_.at(reporterName);
 	} catch (out_of_range&) {
 		throw runtime_error("Unknown reporter: \"" + reporterName + "\"");
 	}
 }
 
 
-BuildStatusRegistrar::BuildStatusRegistrar(const string& reporterName, BuildStatusFactory factoryFunction)
+BuildStatusRegistrar::BuildStatusRegistrar(unique_ptr<BuildStatusReporter> reporter)
 {
-	BuildStatusReporterRegistry::instance().registerReporter(reporterName, factoryFunction);
+	BuildStatusReporterRegistry::instance().registerReporter(move(reporter));
 }
