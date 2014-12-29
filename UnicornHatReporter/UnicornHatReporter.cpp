@@ -1,8 +1,8 @@
 #include "UnicornHatReporter.h"
 #include "BuildStatusReporter.h"
 #include "BuildStatus.h"
+#include "AsyncAnimationPlayer.h"
 
-#include <UnicornHat.h>
 #include <Gif.h>
 
 #include <boost/program_options/variables_map.hpp>
@@ -24,29 +24,32 @@ namespace {
 
 UnicornHatReporter::UnicornHatReporter()
 {
-	auto& hat = UnicornHat::instance();
-	hat.showImage(Gif::fromFile("UnicornHatReporter/boot.gif").getStaticImage());
+	player_.playAnimation(Gif::fromFile("UnicornHatReporter/boot.gif").getAnimation());
 }
 
 
 void UnicornHatReporter::reportBuildStatus(const BuildStatus& status)
 {
-	auto& hat = UnicornHat::instance();
+	if (lastBuildStatus_ == status && status != BuildStatus::unknown) {
+		return; //< Nothing to do.
+	}
+	lastBuildStatus_ = status;
+	
 	switch(status) {
 	case BuildStatus::building:
-		hat.showImage(Gif::fromFile("UnicornHatReporter/building.gif").getStaticImage());
+		player_.playAnimation(Gif::fromFile("UnicornHatReporter/building.gif").getAnimation());
 		break;
 	case BuildStatus::successful:
-		hat.showImage(Gif::fromFile("UnicornHatReporter/successful.gif").getStaticImage());
+		player_.playAnimation(Gif::fromFile("UnicornHatReporter/successful.gif").getAnimation());
 		break;
 	case BuildStatus::failed:
-		hat.showImage(Gif::fromFile("UnicornHatReporter/failed.gif").getStaticImage());
+		player_.playAnimation(Gif::fromFile("UnicornHatReporter/failed.gif").getAnimation());
 		break;
 	case BuildStatus::unknown:
-		hat.showImage(Gif::fromFile("UnicornHatReporter/unknown.gif").getStaticImage());
+		player_.playAnimation(Gif::fromFile("UnicornHatReporter/unknown.gif").getAnimation());
 		break;
 	default:
-		hat.showImage(Gif::fromFile("UnicornHatReporter/unknown.gif").getStaticImage());
+		player_.playAnimation(Gif::fromFile("UnicornHatReporter/unknown.gif").getAnimation());
 		break;		
 	}
 }
