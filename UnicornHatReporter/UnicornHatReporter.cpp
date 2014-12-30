@@ -28,7 +28,7 @@ auto UnicornHatReporter::getName() const -> std::string
 
 auto UnicornHatReporter::getOptionsDescription() const -> options_description
 {
-	options_description desc("UnicornHar Reporter options");
+	options_description desc("UnicornHat Reporter options");
 	desc.add_options()
 		("boot-gif",      value<string>()->default_value("UnicornHatReporter/boot.gif"),       "GIF to show when starting up.")
 		("success-gif",   value<string>()->default_value("UnicornHatReporter/successful.gif"), "GIF to show when build succeeded.")
@@ -46,8 +46,6 @@ void UnicornHatReporter::init(const variables_map& options)
 	options_ = options;
 
 	auto bootGif = options_["boot-gif"].as<string>();
-	cout << options_["boot-gif"].as<string>() << endl;
-	cout << options_["success-gif"].as<string>() << endl;
 	player_ = make_unique<AsyncAnimationPlayer>();
 	player_->playAnimation(Gif::fromFile(bootGif).getAnimation());
 }

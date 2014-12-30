@@ -30,7 +30,7 @@ auto PwmReporter::getName() const -> std::string
 
 auto PwmReporter::getOptionsDescription() const -> options_description
 {
-	options_description desc("Pwm Reporter options");
+	options_description desc("PWM Reporter options");
 	desc.add_options()
 		("red-pin,r",     value<int>()->default_value(8),   "GPIO pin number for red light.")
 		("yellow-pin,y",  value<int>()->default_value(9),   "GPIO pin number for yellow light.")

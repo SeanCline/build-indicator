@@ -7,6 +7,7 @@
 #include <string>
 #include <memory>
 #include <stdexcept>
+#include <sstream>
 
 using namespace std;
 using namespace boost::program_options;
@@ -21,6 +22,14 @@ BuildStatusReporter::~BuildStatusReporter()
 void BuildStatusReporter::init(const boost::program_options::variables_map&)
 {
 
+}
+
+
+auto BuildStatusReporter::getHelpString() const -> string
+{
+	ostringstream oss;
+	oss << getOptionsDescription();
+	return oss.str();
 }
 
 
@@ -51,6 +60,19 @@ auto BuildStatusReporterRegistry::getReporter(const std::string& reporterName) -
 	} catch (out_of_range&) {
 		throw runtime_error("Unknown reporter: \"" + reporterName + "\"");
 	}
+}
+
+
+auto BuildStatusReporterRegistry::getHelpString() -> std::string
+{
+	ostringstream oss;
+	for (auto& reporterPair : registry_) {
+		auto helpString = reporterPair.second->getHelpString();
+		if (!helpString.empty()) { 
+			oss << helpString << endl;
+		}
+	}
+	return oss.str();
 }
 
 
