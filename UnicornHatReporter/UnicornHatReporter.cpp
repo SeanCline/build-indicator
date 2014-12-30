@@ -70,7 +70,7 @@ void UnicornHatReporter::reportBuildStatus(const BuildStatus& status)
 	
 	switch(status) {
 	case BuildStatus::building:
-		player_->playAnimation(Gif::fromFile(options_["boot-gif"].as<string>()).getAnimation());
+		player_->playAnimation(Gif::fromFile(options_["building-gif"].as<string>()).getAnimation());
 		break;
 	case BuildStatus::successful:
 		player_->playAnimation(Gif::fromFile(options_["success-gif"].as<string>()).getAnimation());
