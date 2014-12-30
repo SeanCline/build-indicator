@@ -32,11 +32,12 @@ auto UnicornHatReporter::getOptionsDescription() const -> options_description
 {
 	options_description desc("UnicornHat Reporter options");
 	desc.add_options()
-		("boot-gif",      value<string>()->default_value("UnicornHatReporter/boot.gif"),       "GIF to show when starting up.")
-		("success-gif",   value<string>()->default_value("UnicornHatReporter/successful.gif"), "GIF to show when build succeeded.")
-		("failed-gif",    value<string>()->default_value("UnicornHatReporter/failed.gif"),     "GIF to show when build failed.")
-		("building-gif",  value<string>()->default_value("UnicornHatReporter/building.gif"),   "GIF to show when currently building.")
-		("unknown-gif",   value<string>()->default_value("UnicornHatReporter/unknown.gif"),    "GIF to show when build status is unknown.")
+		("brightness",   value<double>()->default_value(.2),                                  "Unicorn Hat brightness (0 to 1)")
+		("boot-gif",     value<string>()->default_value("UnicornHatReporter/boot.gif"),       "GIF to show when starting up.")
+		("success-gif",  value<string>()->default_value("UnicornHatReporter/successful.gif"), "GIF to show when build succeeded.")
+		("failed-gif",   value<string>()->default_value("UnicornHatReporter/failed.gif"),     "GIF to show when build failed.")
+		("building-gif", value<string>()->default_value("UnicornHatReporter/building.gif"),   "GIF to show when currently building.")
+		("unknown-gif",  value<string>()->default_value("UnicornHatReporter/unknown.gif"),    "GIF to show when build status is unknown.")
 	;
 	
 	return desc;
@@ -49,8 +50,10 @@ void UnicornHatReporter::init(const variables_map& options)
 
 	auto bootGif = options_["boot-gif"].as<string>();
 	player_ = make_unique<AsyncAnimationPlayer>();
+	player_->setBrightness(options_["brightness"].as<double>());
+	
 	auto fut = player_->playAnimation(Gif::fromFile(bootGif).getAnimation());
-	fut.wait_for(3000ms); //< For the animation to end or time out after a few seconds.
+	fut.wait_for(3000ms); //< Wait for the animation to end or time out after a few seconds.
 }
 
 

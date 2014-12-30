@@ -18,6 +18,9 @@ private: // Non-copyable.
 	AsyncAnimationPlayer(const AsyncAnimationPlayer&) = delete;
 	AsyncAnimationPlayer& operator=(const AsyncAnimationPlayer&) = delete;
 
+public: // Animation settings.
+	void setBrightness(double);
+	
 public: // Animation functions.
 	enum class AnimationStatus { finished, cancelled };
 	std::shared_future<AnimationStatus> playAnimation(const Gif2UnicornHat::Animation&);

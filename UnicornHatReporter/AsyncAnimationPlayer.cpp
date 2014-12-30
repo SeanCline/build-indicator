@@ -24,6 +24,12 @@ AsyncAnimationPlayer::~AsyncAnimationPlayer()
 }
 
 
+void AsyncAnimationPlayer::setBrightness(double brightness)
+{
+	UnicornHat::instance().setBrightness(brightness);
+}
+
+
 namespace {
 	AnimationStatus playAnimationWorker(future<void> cancelled, Animation animation)
 	{
