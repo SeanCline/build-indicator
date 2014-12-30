@@ -9,8 +9,10 @@
 
 #include <memory>
 #include <iostream>
+#include <chrono>
 
 using namespace std;
+using namespace std::chrono;
 using namespace boost::program_options;
 using namespace Gif2UnicornHat;
 
@@ -47,7 +49,8 @@ void UnicornHatReporter::init(const variables_map& options)
 
 	auto bootGif = options_["boot-gif"].as<string>();
 	player_ = make_unique<AsyncAnimationPlayer>();
-	player_->playAnimation(Gif::fromFile(bootGif).getAnimation());
+	auto fut = player_->playAnimation(Gif::fromFile(bootGif).getAnimation());
+	fut.wait_for(3000ms); //< For the animation to end or time out after a few seconds.
 }
 
 
