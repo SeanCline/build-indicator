@@ -32,12 +32,14 @@ auto UnicornHatReporter::getOptionsDescription() const -> options_description
 {
 	options_description desc("UnicornHat Reporter options");
 	desc.add_options()
-		("brightness",   value<double>()->default_value(.2),                                  "Unicorn Hat brightness (0 to 1)")
-		("boot-gif",     value<string>()->default_value("UnicornHatReporter/boot.gif"),       "GIF to show when starting up.")
+		("brightness",   value<double>()->default_value(.2), "Unicorn Hat brightness (0 to 1)")
+		("boot-gif",     value<string>()->default_value("UnicornHatReporter/boot.gif"), "GIF to show when starting up.")
 		("success-gif",  value<string>()->default_value("UnicornHatReporter/successful.gif"), "GIF to show when build succeeded.")
-		("failed-gif",   value<string>()->default_value("UnicornHatReporter/failed.gif"),     "GIF to show when build failed.")
-		("building-gif", value<string>()->default_value("UnicornHatReporter/building.gif"),   "GIF to show when currently building.")
-		("unknown-gif",  value<string>()->default_value("UnicornHatReporter/unknown.gif"),    "GIF to show when build status is unknown.")
+		("failed-gif",   value<string>()->default_value("UnicornHatReporter/failed.gif"), "GIF to show when build failed.")
+		("building-unknown-gif", value<string>()->default_value("UnicornHatReporter/building.gif"), "GIF to show when currently building the last status is not known yet..")
+		("building-success-gif", value<string>()->default_value("UnicornHatReporter/building-success.gif"), "GIF to show when currently building and the last build succeeded.")
+		("building-failed-gif", value<string>()->default_value("UnicornHatReporter/building-failed.gif"), "GIF to show when currently building and the last build failed.")
+		("unknown-gif",  value<string>()->default_value("UnicornHatReporter/unknown.gif"), "GIF to show when build status is unknown.")
 	;
 	
 	return desc;
@@ -66,23 +68,38 @@ void UnicornHatReporter::reportBuildStatus(const BuildStatus& status)
 	if (lastBuildStatus_ == status && status != BuildStatus::unknown) {
 		return; //< Nothing to do.
 	}
+
+	auto statusGif = getGifFromStatus(status);
+	player_->playAnimation(statusGif.getAnimation());
+
 	lastBuildStatus_ = status;
-	
-	switch(status) {
+}
+
+
+auto UnicornHatReporter::getGifFromStatus(const BuildStatus& status) const -> Gif
+{
+	string gifFilename = "";
+
+	switch (status) {
 	case BuildStatus::building:
-		player_->playAnimation(Gif::fromFile(options_["building-gif"].as<string>()).getAnimation());
+		if (lastBuildStatus_ == BuildStatus::successful) {
+			gifFilename = options_["building-success-gif"].as<string>();
+		} else if (lastBuildStatus_ == BuildStatus::failed) {
+			gifFilename = options_["building-failed-gif"].as<string>();
+		} else {
+			gifFilename = options_["building-unknown-gif"].as<string>();
+		}
 		break;
 	case BuildStatus::successful:
-		player_->playAnimation(Gif::fromFile(options_["success-gif"].as<string>()).getAnimation());
+		gifFilename = options_["success-gif"].as<string>();
 		break;
 	case BuildStatus::failed:
-		player_->playAnimation(Gif::fromFile(options_["failed-gif"].as<string>()).getAnimation());
-		break;
-	case BuildStatus::unknown:
-		player_->playAnimation(Gif::fromFile(options_["unknown-gif"].as<string>()).getAnimation());
+		gifFilename = options_["failed-gif"].as<string>();
 		break;
 	default:
-		player_->playAnimation(Gif::fromFile(options_["unknown-gif"].as<string>()).getAnimation());
+		gifFilename = options_["unknown-gif"].as<string>();
 		break;
 	}
+	
+	return Gif::fromFile(gifFilename);
 }
