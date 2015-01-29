@@ -1,7 +1,7 @@
 #Installation#
 These instructions assume a fresh installation of [Raspbian](http://www.raspbian.org/).
 
-This project requires GCC 4.9 (or better). I find that the easiest way to get GCC 4.9 is to install or upgrade to Raspbian Jessie. It is possible to pull only the specific packages, or build them oneself, but I will leave that to the reader if it is really necessary. See [Installing Raspbian](InstallingRaspbian.md) for more details.
+This project requires GCC 4.9 (or better). I find that the easiest way to get GCC 4.9 is to install or upgrade to Raspbian Jessie. See [Installing Raspbian](InstallingRaspbian.md) for more details. You may also be able to update only GCC, leaving the rest of the system as it is, as [explained here](https://solarianprogrammer.com/2015/01/13/raspberry-pi-raspbian-install-gcc-compile-cpp-14-programs/).
 
 ##Install dependencies##
 	sudo apt-get install build-essential git libboost-program-options-dev libcurl4-openssl-dev libcurlpp-dev libgif-dev
