@@ -1,12 +1,10 @@
 #Installation#
-These instructions assume a fresh installation of [Raspbian](http://www.raspbian.org/).
-
-This project requires GCC 4.9 (or better). I find that the easiest way to get GCC 4.9 is to install or upgrade to Raspbian Jessie. See [Installing Raspbian](InstallingRaspbian.md) for more details. You may also be able to update only GCC, leaving the rest of the system as it is, as [explained here](https://solarianprogrammer.com/2015/01/13/raspberry-pi-raspbian-install-gcc-compile-cpp-14-programs/).
+These instructions assume a fresh installation of [Raspbian Jessie](https://www.raspberrypi.org/downloads/raspbian/).
 
 ##Install dependencies##
 	sudo apt-get install build-essential git libboost-program-options-dev libcurl4-openssl-dev libcurlpp-dev libgif-dev
 
-##Clone and build build-indicator##
+##Clone and build##
 	cd ~
 	git clone --recursive https://github.com/SeanCline/build-indicator.git
 	cd build-indicator
