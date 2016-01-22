@@ -35,10 +35,10 @@ auto UnicornHatReporter::getOptionsDescription() const -> options_description
 		("brightness",   value<double>()->default_value(.2), "Unicorn Hat brightness (0 to 1)")
 		("boot-gif",     value<string>()->default_value("UnicornHatReporter/boot.gif"), "GIF to show when starting up.")
 		("success-gif",  value<string>()->default_value("UnicornHatReporter/successful.gif"), "GIF to show when build succeeded.")
-		("failed-gif",   value<string>()->default_value("UnicornHatReporter/failed.gif"), "GIF to show when build failed.")
+		("failure-gif",   value<string>()->default_value("UnicornHatReporter/failed.gif"), "GIF to show when build failed.")
 		("building-unknown-gif", value<string>()->default_value("UnicornHatReporter/building.gif"), "GIF to show when currently building the last status is not known yet..")
 		("building-success-gif", value<string>()->default_value("UnicornHatReporter/building-success.gif"), "GIF to show when currently building and the last build succeeded.")
-		("building-failed-gif", value<string>()->default_value("UnicornHatReporter/building-failed.gif"), "GIF to show when currently building and the last build failed.")
+		("building-failure-gif", value<string>()->default_value("UnicornHatReporter/building-failed.gif"), "GIF to show when currently building and the last build failed.")
 		("unknown-gif",  value<string>()->default_value("UnicornHatReporter/unknown.gif"), "GIF to show when build status is unknown.")
 	;
 	
@@ -78,23 +78,23 @@ void UnicornHatReporter::reportBuildStatus(const BuildStatus& status)
 
 auto UnicornHatReporter::getGifFromStatus(const BuildStatus& status) const -> Gif
 {
-	string gifFilename = "";
+	string gifFilename;
 
 	switch (status) {
-	case BuildStatus::building:
-		if (lastBuildStatus_ == BuildStatus::successful) {
-			gifFilename = options_["building-success-gif"].as<string>();
-		} else if (lastBuildStatus_ == BuildStatus::failed) {
-			gifFilename = options_["building-failed-gif"].as<string>();
-		} else {
-			gifFilename = options_["building-unknown-gif"].as<string>();
-		}
+	case BuildStatus::building_success:
+		gifFilename = options_["building-success-gif"].as<string>();
 		break;
-	case BuildStatus::successful:
+	case BuildStatus::building_failure:
+		gifFilename = options_["building-failure-gif"].as<string>();
+		break;
+	case BuildStatus::building_unknown:
+		gifFilename = options_["building-unknown-gif"].as<string>();
+		break;
+	case BuildStatus::success:
 		gifFilename = options_["success-gif"].as<string>();
 		break;
-	case BuildStatus::failed:
-		gifFilename = options_["failed-gif"].as<string>();
+	case BuildStatus::failure:
+		gifFilename = options_["failure-gif"].as<string>();
 		break;
 	default:
 		gifFilename = options_["unknown-gif"].as<string>();

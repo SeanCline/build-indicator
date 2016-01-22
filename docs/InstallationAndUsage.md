@@ -16,11 +16,11 @@ These instructions assume a fresh installation of [Raspbian Jessie](https://www.
 
 If you wanted to report the build status of the Apache Thrift project on a [UnicornHat](http://shop.pimoroni.com/products/unicorn-hat), you would run:
 	
-	sudo ./build-indicator --reporter=UnicornHat --status-uri="https://builds.apache.org/job/Thrift/lastBuild/api/json"
+	sudo ./build-indicator --reporter=UnicornHat --status-uri="https://builds.apache.org/job/Thrift/api/json"
 
 If you, instead, wanted to report the build status, on GPIO pins `7`, `8`, and `9`, you would change the `reporter` like so:
 
-	sudo ./build-indicator --reporter=PWM --status-uri="https://builds.apache.org/job/Thrift/lastBuild/api/json"
+	sudo ./build-indicator --reporter=PWM --status-uri="https://builds.apache.org/job/Thrift/api/json"
 
 For more advanced usage, consult the command line parameters.
 

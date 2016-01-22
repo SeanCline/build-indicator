@@ -3,6 +3,7 @@
 
 #include <string>
 #include <chrono>
+#include <vector>
 #include <boost/program_options.hpp>
 
 using namespace std;
@@ -16,7 +17,7 @@ ProgramOptions::ProgramOptions(int argc, char* argv[])
 	optionsDesc_.add_options()
 		("help,h", "Print this help message.")
 		("reporter", value<string>()->required(), "The module that will be used to report build status. (e.g. PWM, UnicornHat)")
-		("status-uri", value<string>()->required(), "The Jenkins '/api/json' url to periodically extract build status from.")
+		("status-uri", value<std::vector<std::string>>()->multitoken()->composing()->required(), "The Jenkins '/api/json' url to periodically extract build status from.")
 		("polling-period,t", value<int>()->default_value(30), "Seconds between status updates from the Jenkins server.")
 	;
 	
@@ -67,9 +68,9 @@ auto ProgramOptions::getReporter() const -> BuildStatusReporter&
 }
 
 
-auto ProgramOptions::getStatusUri() const -> string
+auto ProgramOptions::getStatusUris() const -> vector<string>
 {
-	return varsMap_["status-uri"].as<string>();
+	return varsMap_["status-uri"].as<vector<string>>();
 }
 
 

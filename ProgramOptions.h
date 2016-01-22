@@ -22,7 +22,7 @@ public: // Methods.
 	auto isHelpRequested() const -> bool;
 	auto getReporterName() const -> std::string;
 	auto getReporter() const -> BuildStatusReporter&;
-	auto getStatusUri() const -> std::string;
+	auto getStatusUris() const -> std::vector<std::string>;
 	auto getPollingPeriod() -> std::chrono::seconds;
 	
 private: // Helpers.

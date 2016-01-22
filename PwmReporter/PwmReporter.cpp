@@ -61,18 +61,25 @@ void PwmReporter::reportBuildStatus(const BuildStatus& status)
 	}
 
 	lights_->turnAllOff();
+	
 	switch(status) {
-		case BuildStatus::building:
-			lights_->setYellowState(SignalTower::LightState::pulsing);
-			break;
-		case BuildStatus::successful:
-			lights_->setGreenState(SignalTower::LightState::solid, 100);
-			break;
-		case BuildStatus::failed:
-			lights_->setRedState(SignalTower::LightState::solid, 100);
-			break;
-		case BuildStatus::unknown:
-			lights_->setRedState(SignalTower::LightState::pulsing);
-			break;
+	case BuildStatus::building_success:
+		lights_->setGreenState(SignalTower::LightState::pulsing);
+		break;
+	case BuildStatus::building_failure:
+		lights_->setRedState(SignalTower::LightState::pulsing);
+		break;
+	case BuildStatus::building_unknown:
+		lights_->setYellowState(SignalTower::LightState::pulsing);
+		break;
+	case BuildStatus::success:
+		lights_->setGreenState(SignalTower::LightState::solid, 100);
+		break;
+	case BuildStatus::failure:
+		lights_->setRedState(SignalTower::LightState::solid, 100);
+		break;
+	default:
+		lights_->setYellowState(SignalTower::LightState::solid, 100);
+		break;
 	}
 }
