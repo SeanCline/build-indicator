@@ -8,8 +8,8 @@
 #include <boost/algorithm/string.hpp>
 
 #include <string>
+#include <map>
 #include <sstream>
-#include <array>
 
 using namespace std;
 using namespace boost::property_tree;
@@ -29,22 +29,19 @@ string to_string(BuildStatus status)
 }
 
 namespace {
-	BuildStatus getBuildStatusBallColor(const string& ballColorString)
+	BuildStatus getBuildStatusFromBallColor(const string& ballColorName)
 	{
-		
-		if (boost::iequals(ballColorString, "blue")) {
-			return BuildStatus::success;
-		} else if (boost::iequals(ballColorString, "red")) {
-			return BuildStatus::failure;
-		} else if (boost::iequals(ballColorString, "blue_anime")) {
-			return BuildStatus::building_success;
-		} else if (boost::iequals(ballColorString, "red_anime")) {
-			return BuildStatus::building_failure;
-		} else if (boost::iequals(ballColorString, "grey_anime")) {
-			return BuildStatus::building_unknown;
-		} else {
-			return BuildStatus::unknown;
-		}
+		const static map<string, BuildStatus> colorToBuildStatus {
+			{"blue", BuildStatus::success},
+			{"red", BuildStatus::failure},
+			{"grey", BuildStatus::unknown},
+			{"blue_anime", BuildStatus::building_success},
+			{"red_anime", BuildStatus::building_failure},
+			{"grey_anime", BuildStatus::building_unknown}
+		};
+
+		auto status = colorToBuildStatus.find(boost::to_lower_copy(ballColorName));
+		return (status != end(colorToBuildStatus)) ? status->second : BuildStatus::unknown;
 	}
 }
 
@@ -58,8 +55,8 @@ BuildStatus queryLastBuildStatus(const string& statusUrl)
 	ptree pt;
 	read_json(ss, pt);
 	
-	string buildResult = pt.get<string>("color");
-	return getBuildStatusBallColor(buildResult);
+	string ballColor = pt.get<string>("color");
+	return getBuildStatusFromBallColor(ballColor);
 }
 
 BuildStatus pickMostInterestingStatus(BuildStatus s1, BuildStatus s2)
