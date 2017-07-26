@@ -1,18 +1,18 @@
-#Installation#
+# Installation #
 These instructions assume a fresh installation of [Raspbian Jessie](https://www.raspberrypi.org/downloads/raspbian/).
 
-##Install dependencies##
+## Install dependencies ##
 	sudo apt-get install build-essential git libboost-program-options-dev libcurl4-openssl-dev libcurlpp-dev libgif-dev
 
-##Clone and build##
+## Clone and build ##
 	cd ~
 	git clone --recursive https://github.com/SeanCline/build-indicator.git
 	cd build-indicator
 	make dependencies && make
 
-#Usage#
+# Usage #
 
-##Example usage##
+## Example usage ##
 
 If you wanted to report the build status of the Apache Thrift project on a [UnicornHat](http://shop.pimoroni.com/products/unicorn-hat), you would run:
 	
@@ -24,15 +24,15 @@ If you, instead, wanted to report the build status, on GPIO pins `7`, `8`, and `
 
 For more advanced usage, consult the command line parameters.
 
-##Command Line Parameters##
+## Command Line Parameters ##
 
-###General Parameters###
+### General Parameters ###
 
 	--reporter <arg>     The module that will be used to report build status. (e.g. PWM, UnicornHat)
 	--status-uri <arg>   The Jenkins '/api/json' url to periodically extract build status from.
 	-t [ --polling-period ] <arg> (Default: 30) Seconds between status updates from the Jenkins server.
 
-###PWM Reporter Parameters###
+### PWM Reporter Parameters ###
 
 	-r [ --red-pin ] <arg>     (Default: 8)   GPIO pin number for red light.
 	-y [ --yellow-pin ] <arg>  (Default: 9)   GPIO pin number for yellow light.
@@ -41,7 +41,7 @@ For more advanced usage, consult the command line parameters.
 
 Consult the [WiringPi documentation](http://wiringpi.com/pins/) for GPIO pin numbers.
 	
-###UnicornHat Reporter Parameters###
+### UnicornHat Reporter Parameters ###
 
 	--brightness <arg>   (Default: 0.2)            Unicorn Hat brightness (0 to 1)
 	--boot-gif <arg>     (Default: boot.gif)       GIF to show when starting up.

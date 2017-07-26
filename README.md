@@ -1,4 +1,4 @@
-#Overview#
+# Overview #
 This project runs on a [Raspberry Pi](https://en.wikipedia.org/wiki/Raspberry_Pi) and polls a Jenkins API URI periodically, displaying the last build status for a software development team to monitor the [continuous integration](https://en.wikipedia.org/wiki/Continuous_integration) status. This practice is described here: [http://en.wikipedia.org/wiki/Build_light_indicator](http://en.wikipedia.org/wiki/Build_light_indicator).
 
 There are (currently) 2 ways to display the build status:
