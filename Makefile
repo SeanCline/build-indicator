@@ -15,7 +15,7 @@ EXECUTABLE = build-indicator
 # 3rd Party Libraries
 GIF2UNICORNPATH = ./UnicornHatReporter/Gif2UnicornHat
 WIRINGPIPATH = ./PwmReporter/wiringPi/wiringPi
-WS2812PATH = $(GIF2UNICORNPATH)/UnicornHat/python/rpi-ws281x/lib/
+WS2812PATH = $(GIF2UNICORNPATH)/UnicornHat/library/legacy/rpi-ws281x/lib/
 
 LDFLAGS += -lcurl -lcurlpp -lgif -lpthread -lboost_program_options -L$(GIF2UNICORNPATH) -lGif2UnicornHat -L$(WS2812PATH) -lws2811 -L$(WIRINGPIPATH) -lwiringPi
 INCLUDES += -I./ -I$(GIF2UNICORNPATH) -I$(WIRINGPIPATH)
