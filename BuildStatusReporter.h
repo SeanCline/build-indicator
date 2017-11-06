@@ -6,7 +6,7 @@
 #include <boost/program_options/variables_map.hpp>
 #include <boost/program_options/options_description.hpp>
 
-enum class BuildStatus;
+#include "BuildStatus.h"
 
 class BuildStatusReporter {
 public:

@@ -2,17 +2,18 @@
 
 #include <string>
 
-enum class BuildStatus { // Sorted in order of how important they are to present to the user.
-	building_failure,
-	building_success,
-	failure,
-	building_unknown,
-	success,
-	unknown
+struct BuildStatus {
+	enum Status : char {
+		failure, success, unknown //< In order of how important to report to the user.
+	} status;
+	
+	bool isCurrentlyBuilding;
 };
 
-std::string to_string(BuildStatus);
+auto operator==(const BuildStatus&, const BuildStatus&) -> bool;
 
-BuildStatus queryLastBuildStatus(const std::string& statusUrl);
+auto to_string(const BuildStatus&) -> std::string;
 
-BuildStatus pickMostInterestingStatus(BuildStatus s1, BuildStatus s2);
+auto queryLastBuildStatus(const std::string& statusUrl) -> BuildStatus;
+
+auto combineBuildStatus(const BuildStatus& s1, const BuildStatus& s2) -> BuildStatus;

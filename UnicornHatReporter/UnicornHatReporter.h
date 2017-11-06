@@ -24,6 +24,6 @@ private:
 
 private:
 	std::unique_ptr<AsyncAnimationPlayer> player_;
-	BuildStatus lastBuildStatus_ = BuildStatus::unknown;
+	BuildStatus lastBuildStatus_ = {BuildStatus::unknown, false};
 	boost::program_options::variables_map options_;
 };

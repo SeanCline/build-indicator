@@ -10,42 +10,56 @@
 #include <string>
 #include <map>
 #include <sstream>
+#include <algorithm>
 
 using namespace std;
 using namespace boost::property_tree;
 
 
-string to_string(BuildStatus status)
+auto operator==(const BuildStatus& lhs, const BuildStatus& rhs) -> bool
 {
-	switch(status) {
-	case BuildStatus::success:          return "success";
-	case BuildStatus::failure:          return "failure";
-	case BuildStatus::unknown:          return "unknown";
-	case BuildStatus::building_success: return "building_success";
-	case BuildStatus::building_failure: return "building_failure";
-	case BuildStatus::building_unknown: return "building_unknown";
-	default: throw runtime_error("Unexpected value for BuildStatus.");
+	return (lhs.status == rhs.status) && (lhs.isCurrentlyBuilding == rhs.isCurrentlyBuilding);
+}
+
+auto to_string(const BuildStatus& st) -> string
+{
+	string statusStr;
+	if (st.isCurrentlyBuilding) {
+		statusStr += "building_";
 	}
+	
+	switch(st.status) {
+		case BuildStatus::success: statusStr += "success"; break;
+		case BuildStatus::failure: statusStr += "failure"; break;
+		case BuildStatus::unknown: statusStr += "unknown"; break;
+		default: throw runtime_error("Unexpected value for BuildStatus.");
+	}
+	
+	return statusStr;
 }
 
 namespace {
+	const static map<string, BuildStatus> colorToBuildStatus {
+		{"blue",       { BuildStatus::success, false} },
+		{"red",        { BuildStatus::failure, false} },
+		{"grey",       { BuildStatus::unknown, false} },
+		{"blue_anime", { BuildStatus::success, true} },
+		{"red_anime",  { BuildStatus::failure, true} },
+		{"grey_anime", { BuildStatus::unknown, true} }
+	};
+		
 	BuildStatus getBuildStatusFromBallColor(const string& ballColorName)
 	{
-		const static map<string, BuildStatus> colorToBuildStatus {
-			{"blue", BuildStatus::success},
-			{"red", BuildStatus::failure},
-			{"grey", BuildStatus::unknown},
-			{"blue_anime", BuildStatus::building_success},
-			{"red_anime", BuildStatus::building_failure},
-			{"grey_anime", BuildStatus::building_unknown}
-		};
-
-		auto status = colorToBuildStatus.find(boost::to_lower_copy(ballColorName));
-		return (status != end(colorToBuildStatus)) ? status->second : BuildStatus::unknown;
+		auto statusIt = colorToBuildStatus.find(boost::to_lower_copy(ballColorName));
+		if (statusIt != end(colorToBuildStatus)) {
+			return statusIt->second;
+		} else {
+			return { BuildStatus::unknown, false };
+		}
 	}
 }
 
-BuildStatus queryLastBuildStatus(const string& statusUrl)
+auto queryLastBuildStatus(const string& statusUrl) -> BuildStatus
 {
 	// Pull the status json from the server.
 	stringstream ss;
@@ -59,7 +73,10 @@ BuildStatus queryLastBuildStatus(const string& statusUrl)
 	return getBuildStatusFromBallColor(ballColor);
 }
 
-BuildStatus pickMostInterestingStatus(BuildStatus s1, BuildStatus s2)
+auto combineBuildStatus(const BuildStatus& s1, const BuildStatus& s2) -> BuildStatus
 {
-	return (static_cast<int>(s1) < static_cast<int>(s2)) ? s1 : s2;
+	BuildStatus combinedStatus;
+	combinedStatus.status = min(s1.status, s2.status); //< Pick the worst status.
+	combinedStatus.isCurrentlyBuilding = s1.isCurrentlyBuilding | s2.isCurrentlyBuilding; //< Apply the building flag to the status.
+	return combinedStatus;
 }

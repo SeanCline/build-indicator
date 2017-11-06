@@ -27,7 +27,7 @@ void ConsoleReporter::init(const variables_map&)
 }
 
 
-void ConsoleReporter::reportBuildStatus(const BuildStatus& status)
+void ConsoleReporter::reportBuildStatus(const BuildStatus& st)
 {
-	cout << "Build status: " << static_cast<long>(status) << " - " << to_string(status) << endl;
+	cout << "Build status: " << st.status << ":" << st.isCurrentlyBuilding << " - " << to_string(st) << endl;
 }

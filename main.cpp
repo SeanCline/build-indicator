@@ -30,7 +30,8 @@ namespace {
 				cerr << "Failed to get build status. Error = " << ex.what() << endl;
 			}
 			
-			BuildStatus aggregateStatus = accumulate(begin(statuses), end(statuses), BuildStatus::unknown, pickMostInterestingStatus);
+			const BuildStatus initialStatus = { BuildStatus::unknown, false };
+			BuildStatus aggregateStatus = accumulate(begin(statuses), end(statuses), initialStatus, combineBuildStatus);
 			reporter.reportBuildStatus(aggregateStatus);
 			
 			this_thread::sleep_for(pollingPeriod);

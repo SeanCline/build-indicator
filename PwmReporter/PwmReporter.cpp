@@ -54,7 +54,7 @@ void PwmReporter::init(const variables_map& options)
 }
 
 
-void PwmReporter::reportBuildStatus(const BuildStatus& status)
+void PwmReporter::reportBuildStatus(const BuildStatus& st)
 {
 	if (!lights_) {
 		throw logic_error("PwmReporter::init not called before reportBuildStatus.");
@@ -62,24 +62,27 @@ void PwmReporter::reportBuildStatus(const BuildStatus& status)
 
 	lights_->turnAllOff();
 	
-	switch(status) {
-	case BuildStatus::building_success:
-		lights_->setGreenState(SignalTower::LightState::pulsing);
-		break;
-	case BuildStatus::building_failure:
-		lights_->setRedState(SignalTower::LightState::pulsing);
-		break;
-	case BuildStatus::building_unknown:
-		lights_->setYellowState(SignalTower::LightState::pulsing);
-		break;
+	switch(st.status) {
 	case BuildStatus::success:
-		lights_->setGreenState(SignalTower::LightState::solid, 100);
+		if (st.isCurrentlyBuilding) {
+			lights_->setGreenState(SignalTower::LightState::pulsing);
+		} else {
+			lights_->setGreenState(SignalTower::LightState::solid, 100);
+		}
 		break;
 	case BuildStatus::failure:
-		lights_->setRedState(SignalTower::LightState::solid, 100);
+		if (st.isCurrentlyBuilding) {
+			lights_->setRedState(SignalTower::LightState::pulsing);
+		} else {
+			lights_->setRedState(SignalTower::LightState::solid, 100);
+		}
 		break;
 	default:
-		lights_->setYellowState(SignalTower::LightState::solid, 100);
+		if (st.isCurrentlyBuilding) {
+			lights_->setYellowState(SignalTower::LightState::pulsing);
+		} else {
+			lights_->setYellowState(SignalTower::LightState::solid, 100);
+		}
 		break;
 	}
 }

@@ -59,47 +59,33 @@ void UnicornHatReporter::init(const variables_map& options)
 }
 
 
-void UnicornHatReporter::reportBuildStatus(const BuildStatus& status)
+void UnicornHatReporter::reportBuildStatus(const BuildStatus& st)
 {
 	if (!player_) {
 		throw logic_error("UnicornHatReporter::init not called before reportBuildStatus.");
 	}
 
-	if (lastBuildStatus_ == status && status != BuildStatus::unknown) {
+	if (lastBuildStatus_ == st && st.status != BuildStatus::unknown) {
 		return; //< Nothing to do.
 	}
 
-	auto statusGif = getGifFromStatus(status);
+	auto statusGif = getGifFromStatus(st);
 	player_->playAnimation(statusGif.getAnimation());
 
-	lastBuildStatus_ = status;
+	lastBuildStatus_ = st;
 }
 
 
-auto UnicornHatReporter::getGifFromStatus(const BuildStatus& status) const -> Gif
+auto UnicornHatReporter::getGifFromStatus(const BuildStatus& st) const -> Gif
 {
-	string gifFilename;
-
-	switch (status) {
-	case BuildStatus::building_success:
-		gifFilename = options_["building-success-gif"].as<string>();
-		break;
-	case BuildStatus::building_failure:
-		gifFilename = options_["building-failure-gif"].as<string>();
-		break;
-	case BuildStatus::building_unknown:
-		gifFilename = options_["building-unknown-gif"].as<string>();
-		break;
-	case BuildStatus::success:
-		gifFilename = options_["success-gif"].as<string>();
-		break;
-	case BuildStatus::failure:
-		gifFilename = options_["failure-gif"].as<string>();
-		break;
-	default:
-		gifFilename = options_["unknown-gif"].as<string>();
-		break;
-	}
+	const string gifFileKey = [&]() {
+		switch (st.status) {
+		case BuildStatus::success: return st.isCurrentlyBuilding ? "building-success-gif" : "success-gif";
+		case BuildStatus::failure: return st.isCurrentlyBuilding ? "building-failure-gif" : "failure-gif";
+		default:                   return st.isCurrentlyBuilding ? "building-unknown-gif" : "unknown-gif";
+		}
+	}();
 	
+	const string gifFilename = options_[gifFileKey].as<string>();
 	return Gif::fromFile(gifFilename);
 }
