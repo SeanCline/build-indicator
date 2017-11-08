@@ -4,6 +4,7 @@
 #include <string>
 #include <chrono>
 #include <vector>
+#include <iostream>
 #include <boost/program_options.hpp>
 
 using namespace std;
