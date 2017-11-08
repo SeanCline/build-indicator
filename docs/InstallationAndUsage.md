@@ -1,5 +1,5 @@
 # Installation #
-These instructions assume a fresh installation of [Raspbian Jessie](https://www.raspberrypi.org/downloads/raspbian/).
+These instructions assume a fresh installation of [Raspbian Stretch](https://www.raspberrypi.org/downloads/raspbian/).
 
 ## Install dependencies ##
 	sudo apt-get install build-essential git libboost-program-options-dev libcurl4-openssl-dev libcurlpp-dev libgif-dev

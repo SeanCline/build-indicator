@@ -15,14 +15,14 @@ EXECUTABLE = build-indicator
 # 3rd Party Libraries
 GIF2UNICORNPATH = ./UnicornHatReporter/Gif2UnicornHat
 WIRINGPIPATH = ./PwmReporter/wiringPi/wiringPi
-WS2812PATH = $(GIF2UNICORNPATH)/UnicornHat/library/legacy/rpi-ws281x/lib/
+WS2812PATH = $(GIF2UNICORNPATH)/rpi_ws281x/
 
 LDFLAGS += -lcurl -lcurlpp -lgif -lpthread -lboost_program_options -L$(GIF2UNICORNPATH) -lGif2UnicornHat -L$(WS2812PATH) -lws2811 -L$(WIRINGPIPATH) -lwiringPi
 INCLUDES += -I./ -I$(GIF2UNICORNPATH) -I$(WIRINGPIPATH)
 
 # Build Flags
 OPTIMIZATION_LEVEL = -O0 -g -ggdb
-WARNINGS = -Wall -Wextra -Wcast-align -Wcast-qual -Wconversion -Wformat=2 -Winit-self -Winvalid-pch -Wmissing-format-attribute -Wmissing-include-dirs -Wpacked -Wredundant-decls -Wunreachable-code
+WARNINGS = -Wall -Wextra -Wcast-align -Wcast-qual -Wconversion -Wformat=2 -Winit-self -Winvalid-pch -Wmissing-format-attribute -Wmissing-include-dirs -Wpacked -Wredundant-decls -Wunreachable-code -Wno-psabi
 STRICTNESS = -pedantic
 CXXFLAGS = -std=c++1y $(OPTIMIZATION_LEVEL) $(WARNINGS) $(STRICTNESS)
 
