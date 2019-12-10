@@ -1,7 +1,3 @@
 [submodule "UnicornHatReporter/Gif2UnicornHat"]
 	path = UnicornHatReporter/Gif2UnicornHat
 	url = https://github.com/SeanCline/Gif2UnicornHat
-
-[submodule "PwmReporter/wiringPi"]
-	url = git://git.drogon.net/wiringPi
-	path = PwmReporter/wiringPi
