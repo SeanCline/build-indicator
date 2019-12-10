@@ -18,10 +18,6 @@ If you wanted to report the build status of the Apache Thrift project on a [Unic
 	
 	sudo ./build-indicator --reporter=UnicornHat --status-uri="https://builds.apache.org/job/Thrift/api/json"
 
-If you, instead, wanted to report the build status, on GPIO pins `7`, `8`, and `9`, you would change the `reporter` like so:
-
-	sudo ./build-indicator --reporter=PWM --status-uri="https://builds.apache.org/job/Thrift/api/json"
-
 For more advanced usage, consult the command line parameters.
 
 ## Command Line Parameters ##
@@ -32,15 +28,6 @@ For more advanced usage, consult the command line parameters.
 	--status-uri <arg>   The Jenkins '/api/json' url to periodically extract build status from.
 	-t [ --polling-period ] <arg> (Default: 30) Seconds between status updates from the Jenkins server.
 
-### PWM Reporter Parameters ###
-
-	-r [ --red-pin ] <arg>     (Default: 8)   GPIO pin number for red light.
-	-y [ --yellow-pin ] <arg>  (Default: 9)   GPIO pin number for yellow light.
-	-g [ --green-pin ] <arg>   (Default: 7)   GPIO pin number for green light.
-	-p [ --fade-period ] <arg> (Default: 500) Millisecond period for pulsing LEDs to blink.
-
-Consult the [WiringPi documentation](http://wiringpi.com/pins/) for GPIO pin numbers.
-	
 ### UnicornHat Reporter Parameters ###
 
 	--brightness <arg>   (Default: 0.2)            Unicorn Hat brightness (0 to 1)
