@@ -6,6 +6,7 @@
 // Forward Declarations.
 namespace Gif2UnicornHat {
 	class Animation;
+	class ImageDisplay;
 }
 
 class AsyncAnimationPlayer
@@ -19,11 +20,11 @@ private: // Non-copyable.
 	AsyncAnimationPlayer& operator=(const AsyncAnimationPlayer&) = delete;
 
 public: // Animation settings.
-	void setBrightness(double);
+	void setBrightness(Gif2UnicornHat::ImageDisplay& hat, double);
 	
 public: // Animation functions.
 	enum class AnimationStatus { finished, cancelled };
-	std::shared_future<AnimationStatus> playAnimation(const Gif2UnicornHat::Animation&);
+	std::shared_future<AnimationStatus> playAnimation(Gif2UnicornHat::ImageDisplay& hat, const Gif2UnicornHat::Animation&);
 	void cancelCurrentAnimation();
 
 private: // Async Schtuff.

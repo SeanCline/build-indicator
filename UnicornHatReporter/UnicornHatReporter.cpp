@@ -4,6 +4,7 @@
 #include "AsyncAnimationPlayer.h"
 
 #include <Gif.h>
+#include <UnicornHat.h>
 
 #include <boost/program_options.hpp>
 
@@ -49,12 +50,13 @@ auto UnicornHatReporter::getOptionsDescription() const -> options_description
 void UnicornHatReporter::init(const variables_map& options)
 {
 	options_ = options;
-
+	hat_ = std::unique_ptr<UnicornHat>(new UnicornHat);
+	
 	auto bootGif = options_["boot-gif"].as<string>();
 	player_ = make_unique<AsyncAnimationPlayer>();
-	player_->setBrightness(options_["brightness"].as<double>());
+	player_->setBrightness(*hat_, options_["brightness"].as<double>());
 	
-	auto fut = player_->playAnimation(Gif::fromFile(bootGif).getAnimation());
+	auto fut = player_->playAnimation(*hat_, Gif::fromFile(bootGif).getAnimation());
 	fut.wait_for(3000ms); //< Wait for the animation to end or time out after a few seconds.
 }
 
@@ -70,7 +72,7 @@ void UnicornHatReporter::reportBuildStatus(const BuildStatus& st)
 	}
 
 	auto statusGif = getGifFromStatus(st);
-	player_->playAnimation(statusGif.getAnimation());
+	player_->playAnimation(*hat_, statusGif.getAnimation());
 
 	lastBuildStatus_ = st;
 }

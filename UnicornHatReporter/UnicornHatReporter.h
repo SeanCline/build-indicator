@@ -9,7 +9,11 @@
 
 #include <memory>
 
+// Forward Declarations.
 class AsyncAnimationPlayer;
+namespace Gif2UnicornHat {
+	class ImageDisplay;
+}
 
 class UnicornHatReporter : public BuildStatusReporter
 {
@@ -24,6 +28,7 @@ private:
 
 private:
 	std::unique_ptr<AsyncAnimationPlayer> player_;
+	std::unique_ptr<Gif2UnicornHat::ImageDisplay> hat_;
 	BuildStatus lastBuildStatus_ = {BuildStatus::unknown, false};
 	boost::program_options::variables_map options_;
 };

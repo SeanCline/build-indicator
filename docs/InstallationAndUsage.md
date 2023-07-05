@@ -1,8 +1,10 @@
 # Installation #
-These instructions assume a fresh installation of [Raspbian Stretch](https://www.raspberrypi.org/downloads/raspbian/).
+These instructions assume a fresh installation of [Raspberry Pi OS Buster](https://www.raspberrypi.org/downloads/raspberry-pi-os/).
 
 ## Install dependencies ##
-	sudo apt-get install build-essential git libboost-program-options-dev libcurl4-openssl-dev libcurlpp-dev libgif-dev scons
+	sudo apt update
+	sudo apt upgrade
+	sudo apt install build-essential git libboost-program-options-dev libcurl4-openssl-dev libcurlpp-dev libgif-dev scons
 
 ## Clone and build ##
 	cd ~
@@ -14,9 +16,9 @@ These instructions assume a fresh installation of [Raspbian Stretch](https://www
 
 ## Example usage ##
 
-If you wanted to report the build status of the Apache Thrift project on a [UnicornHat](http://shop.pimoroni.com/products/unicorn-hat), you would run:
+If you wanted to report the build status of the Apache Tomcat project on a [UnicornHat](http://shop.pimoroni.com/products/unicorn-hat), you would run:
 	
-	sudo ./build-indicator --reporter=UnicornHat --status-uri="https://builds.apache.org/job/Thrift/api/json"
+	sudo ./build-indicator --reporter=UnicornHat --status-uri="https://builds.apache.org/job/Tomcat/job/tomcat-taglibs/job/tomcat-taglibs-standard/job/main/api/json"
 
 For more advanced usage, consult the command line parameters.
 

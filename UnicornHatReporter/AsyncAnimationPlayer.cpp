@@ -24,17 +24,15 @@ AsyncAnimationPlayer::~AsyncAnimationPlayer()
 }
 
 
-void AsyncAnimationPlayer::setBrightness(double brightness)
+void AsyncAnimationPlayer::setBrightness(ImageDisplay& hat, double brightness)
 {
-	UnicornHat::instance().setBrightness(brightness);
+	hat.setBrightness(brightness);
 }
 
 
 namespace {
-	AnimationStatus playAnimationWorker(future<void> cancelled, Animation animation)
+	AnimationStatus playAnimationWorker(ImageDisplay& hat, future<void> cancelled, Animation animation)
 	{
-		UnicornHat& hat = UnicornHat::instance();
-		
 		int numLoops = (animation.numFrames() == 1) ? 1 : animation.numLoops(); //< Don't loop if there is only one frame.
 		for (int loopNum = 0; loopNum < numLoops || numLoops == 0; ++loopNum) {
 			for (auto& frame : animation.frames()) {				
@@ -53,12 +51,12 @@ namespace {
 }
 
 
-shared_future<AnimationStatus> AsyncAnimationPlayer::playAnimation(const Animation& animation)
+shared_future<AnimationStatus> AsyncAnimationPlayer::playAnimation(ImageDisplay& hat, const Animation& animation)
 {
 	cancelCurrentAnimation();
 	
 	cancelPromise_ = promise<void>();
-	currentFuture_ = std::async(launch::async, playAnimationWorker, cancelPromise_.get_future(), animation);
+	currentFuture_ = std::async(launch::async, playAnimationWorker, std::ref(hat), cancelPromise_.get_future(), animation);
 	return currentFuture_;
 }
 
